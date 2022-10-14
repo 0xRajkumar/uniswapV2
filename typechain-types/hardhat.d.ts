@@ -13,9 +13,25 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
-      name: "IERC20",
+      name: "Factory",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IERC20__factory>;
+    ): Promise<Contracts.Factory__factory>;
+    getContractFactory(
+      name: "ICallee",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ICallee__factory>;
+    getContractFactory(
+      name: "IFactory",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IFactory__factory>;
+    getContractFactory(
+      name: "IPool",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IPool__factory>;
+    getContractFactory(
+      name: "Library",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Library__factory>;
     getContractFactory(
       name: "IERC20",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -24,6 +40,10 @@ declare module "hardhat/types/runtime" {
       name: "Pool",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Pool__factory>;
+    getContractFactory(
+      name: "Router",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Router__factory>;
     getContractFactory(
       name: "Token",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -34,10 +54,30 @@ declare module "hardhat/types/runtime" {
     ): Promise<Contracts.ERC20__factory>;
 
     getContractAt(
-      name: "IERC20",
+      name: "Factory",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.IERC20>;
+    ): Promise<Contracts.Factory>;
+    getContractAt(
+      name: "ICallee",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ICallee>;
+    getContractAt(
+      name: "IFactory",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IFactory>;
+    getContractAt(
+      name: "IPool",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IPool>;
+    getContractAt(
+      name: "Library",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Library>;
     getContractAt(
       name: "IERC20",
       address: string,
@@ -48,6 +88,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.Pool>;
+    getContractAt(
+      name: "Router",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Router>;
     getContractAt(
       name: "Token",
       address: string,

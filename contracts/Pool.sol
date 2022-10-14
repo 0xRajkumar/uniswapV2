@@ -86,9 +86,9 @@ contract Pool is ERC20, Math {
         bytes calldata data
     ) public {
         require(amount0 > 0 || amount1 > 0, 'invalid amount');
-        (uint112 reserve0, uint112 reserve1, ) = getReserves();
+        (uint112 reserve0_, uint112 reserve1_, ) = getReserves();
         require(
-            amount0 < reserve0 && amount1 < reserve1,
+            amount0 < reserve0_ && amount1 < reserve1_,
             'insufficient liquidity'
         );
         if (amount0 > 0) _safeTransfer(token0, to, amount0);
@@ -99,23 +99,21 @@ contract Pool is ERC20, Math {
         uint256 balance0 = IERC20(token0).balanceOf(address(this));
         uint256 balance1 = IERC20(token1).balanceOf(address(this));
 
-        uint256 amount0In = balance0 > (reserve0 - amount0)
-            ? balance0 - reserve0 - amount0
+        uint256 amount0In = balance0 > (reserve0_ - amount0)
+            ? balance0 - (reserve0 - amount0)
             : 0;
-        uint256 amount1In = balance1 > (reserve1 - amount1)
-            ? balance1 - reserve1 - amount1
+        uint256 amount1In = balance1 > (reserve1_ - amount1)
+            ? balance1 - (reserve1 - amount1)
             : 0;
-        require(amount0In > 0 || amount0In > 0, 'insufficient input amount');
+        require(amount0In > 0 || amount1In > 0, 'insufficient input amount');
         uint256 balance0Adjusted = (1000 * balance0) - (amount0In * 3);
         uint256 balance1Adjusted = (1000 * balance1) - (amount1In * 3);
         require(
-            balance0Adjusted * balance1Adjusted >
-                uint256(reserve0) * uint256(reserve1) * (10000**2),
+            balance0Adjusted * balance1Adjusted >=
+                uint256(reserve0_) * uint256(reserve1_) * (1000**2),
             'invalid constant'
         );
-        _update(balance0, balance1, reserve0, reserve1);
-        if (amount0 > 0) IERC20(token0).transfer(to, amount0);
-        if (amount1 > 0) IERC20(token1).transfer(to, amount1);
+        _update(balance0, balance1, reserve0_, reserve1_);
     }
 
     function _update(

@@ -21,15 +21,21 @@ export interface PoolInterface extends utils.Interface {
   contractName: "Pool";
   functions: {
     "DOMAIN_SEPARATOR()": FunctionFragment;
+    "_update(uint256,uint256,uint112,uint112)": FunctionFragment;
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
-    "burn()": FunctionFragment;
+    "burn(address)": FunctionFragment;
     "decimals()": FunctionFragment;
-    "mint()": FunctionFragment;
+    "getReserves()": FunctionFragment;
+    "initialize(address,address)": FunctionFragment;
+    "mint(address)": FunctionFragment;
     "name()": FunctionFragment;
     "nonces(address)": FunctionFragment;
     "permit(address,address,uint256,uint256,uint8,bytes32,bytes32)": FunctionFragment;
+    "price0CumulativeLast()": FunctionFragment;
+    "price1CumulativeLast()": FunctionFragment;
+    "swap(uint256,uint256,address,bytes)": FunctionFragment;
     "symbol()": FunctionFragment;
     "token0()": FunctionFragment;
     "token1()": FunctionFragment;
@@ -43,6 +49,10 @@ export interface PoolInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "_update",
+    values: [BigNumberish, BigNumberish, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "allowance",
     values: [string, string]
   ): string;
@@ -51,9 +61,17 @@ export interface PoolInterface extends utils.Interface {
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
-  encodeFunctionData(functionFragment: "burn", values?: undefined): string;
+  encodeFunctionData(functionFragment: "burn", values: [string]): string;
   encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
-  encodeFunctionData(functionFragment: "mint", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "getReserves",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "initialize",
+    values: [string, string]
+  ): string;
+  encodeFunctionData(functionFragment: "mint", values: [string]): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "nonces", values: [string]): string;
   encodeFunctionData(
@@ -67,6 +85,18 @@ export interface PoolInterface extends utils.Interface {
       BytesLike,
       BytesLike
     ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "price0CumulativeLast",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "price1CumulativeLast",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "swap",
+    values: [BigNumberish, BigNumberish, string, BytesLike]
   ): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(functionFragment: "token0", values?: undefined): string;
@@ -88,15 +118,30 @@ export interface PoolInterface extends utils.Interface {
     functionFragment: "DOMAIN_SEPARATOR",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "_update", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getReserves",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "nonces", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "permit", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "price0CumulativeLast",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "price1CumulativeLast",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "swap", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "token0", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "token1", data: BytesLike): Result;
@@ -163,6 +208,14 @@ export interface Pool extends BaseContract {
   functions: {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<[string]>;
 
+    _update(
+      _balance0: BigNumberish,
+      _balance1: BigNumberish,
+      _reserve0: BigNumberish,
+      _reserve1: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     allowance(
       arg0: string,
       arg1: string,
@@ -178,12 +231,24 @@ export interface Pool extends BaseContract {
     balanceOf(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     burn(
+      _to: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     decimals(overrides?: CallOverrides): Promise<[number]>;
 
+    getReserves(
+      overrides?: CallOverrides
+    ): Promise<[BigNumber, BigNumber, number]>;
+
+    initialize(
+      _token0: string,
+      _token1: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     mint(
+      _to: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -199,6 +264,18 @@ export interface Pool extends BaseContract {
       v: BigNumberish,
       r: BytesLike,
       s: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    price0CumulativeLast(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    price1CumulativeLast(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    swap(
+      amount0: BigNumberish,
+      amount1: BigNumberish,
+      to: string,
+      data: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -226,6 +303,14 @@ export interface Pool extends BaseContract {
 
   DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<string>;
 
+  _update(
+    _balance0: BigNumberish,
+    _balance1: BigNumberish,
+    _reserve0: BigNumberish,
+    _reserve1: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   allowance(
     arg0: string,
     arg1: string,
@@ -241,12 +326,24 @@ export interface Pool extends BaseContract {
   balanceOf(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   burn(
+    _to: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   decimals(overrides?: CallOverrides): Promise<number>;
 
+  getReserves(
+    overrides?: CallOverrides
+  ): Promise<[BigNumber, BigNumber, number]>;
+
+  initialize(
+    _token0: string,
+    _token1: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   mint(
+    _to: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -262,6 +359,18 @@ export interface Pool extends BaseContract {
     v: BigNumberish,
     r: BytesLike,
     s: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  price0CumulativeLast(overrides?: CallOverrides): Promise<BigNumber>;
+
+  price1CumulativeLast(overrides?: CallOverrides): Promise<BigNumber>;
+
+  swap(
+    amount0: BigNumberish,
+    amount1: BigNumberish,
+    to: string,
+    data: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -289,6 +398,14 @@ export interface Pool extends BaseContract {
   callStatic: {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<string>;
 
+    _update(
+      _balance0: BigNumberish,
+      _balance1: BigNumberish,
+      _reserve0: BigNumberish,
+      _reserve1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     allowance(
       arg0: string,
       arg1: string,
@@ -303,11 +420,24 @@ export interface Pool extends BaseContract {
 
     balanceOf(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    burn(overrides?: CallOverrides): Promise<void>;
+    burn(
+      _to: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber, BigNumber]>;
 
     decimals(overrides?: CallOverrides): Promise<number>;
 
-    mint(overrides?: CallOverrides): Promise<void>;
+    getReserves(
+      overrides?: CallOverrides
+    ): Promise<[BigNumber, BigNumber, number]>;
+
+    initialize(
+      _token0: string,
+      _token1: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    mint(_to: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<string>;
 
@@ -321,6 +451,18 @@ export interface Pool extends BaseContract {
       v: BigNumberish,
       r: BytesLike,
       s: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    price0CumulativeLast(overrides?: CallOverrides): Promise<BigNumber>;
+
+    price1CumulativeLast(overrides?: CallOverrides): Promise<BigNumber>;
+
+    swap(
+      amount0: BigNumberish,
+      amount1: BigNumberish,
+      to: string,
+      data: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -373,6 +515,14 @@ export interface Pool extends BaseContract {
   estimateGas: {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<BigNumber>;
 
+    _update(
+      _balance0: BigNumberish,
+      _balance1: BigNumberish,
+      _reserve0: BigNumberish,
+      _reserve1: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     allowance(
       arg0: string,
       arg1: string,
@@ -388,12 +538,22 @@ export interface Pool extends BaseContract {
     balanceOf(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     burn(
+      _to: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     decimals(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getReserves(overrides?: CallOverrides): Promise<BigNumber>;
+
+    initialize(
+      _token0: string,
+      _token1: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     mint(
+      _to: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -409,6 +569,18 @@ export interface Pool extends BaseContract {
       v: BigNumberish,
       r: BytesLike,
       s: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    price0CumulativeLast(overrides?: CallOverrides): Promise<BigNumber>;
+
+    price1CumulativeLast(overrides?: CallOverrides): Promise<BigNumber>;
+
+    swap(
+      amount0: BigNumberish,
+      amount1: BigNumberish,
+      to: string,
+      data: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -437,6 +609,14 @@ export interface Pool extends BaseContract {
   populateTransaction: {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    _update(
+      _balance0: BigNumberish,
+      _balance1: BigNumberish,
+      _reserve0: BigNumberish,
+      _reserve1: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     allowance(
       arg0: string,
       arg1: string,
@@ -455,12 +635,22 @@ export interface Pool extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     burn(
+      _to: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     decimals(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    getReserves(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    initialize(
+      _token0: string,
+      _token1: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     mint(
+      _to: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -479,6 +669,22 @@ export interface Pool extends BaseContract {
       v: BigNumberish,
       r: BytesLike,
       s: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    price0CumulativeLast(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    price1CumulativeLast(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    swap(
+      amount0: BigNumberish,
+      amount1: BigNumberish,
+      to: string,
+      data: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
