@@ -107,10 +107,6 @@ contract Pool is ERC20, Math {
         require(amount0In > 0 || amount1In > 0, 'insufficient input amount');
         uint256 balance0Adjusted = (1000 * balance0) - (amount0In * 3);
         uint256 balance1Adjusted = (1000 * balance1) - (amount1In * 3);
-        console.log(
-            balance0Adjusted * balance1Adjusted >=
-                uint256(reserve0_) * uint256(reserve1_) * (1000**2)
-        );
         require(
             balance0Adjusted * balance1Adjusted >=
                 uint256(reserve0_) * uint256(reserve1_) * (1000**2),

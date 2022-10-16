@@ -6,7 +6,8 @@ import {
     Token,
     Token__factory,
     Factory,
-    Factory__factory
+    Factory__factory,
+    Flashloan__factory
 } from '../typechain-types';
 
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
@@ -175,5 +176,21 @@ describe('Pool', function () {
                 pool.swap(0, toWei(2), owner.address, '0x')
             ).to.be.revertedWith('insufficient liquidity');
         });
+    });
+
+    it('tests flashloan', async () => {
+        const Flashloan = (await ethers.getContractFactory(
+            'Flashloan'
+        )) as Flashloan__factory;
+        const flashloan = await Flashloan.deploy();
+        await flashloan.deployed();
+
+        await token0.transfer(pool.address, toWei(5));
+        await token1.transfer(pool.address, toWei(5));
+        await pool.mint(owner.address);
+        const loanAmountInEther = 1;
+        const fees = (99.7 * loanAmountInEther) / 100;
+        token1.transfer(flashloan.address, toWei(fees));
+        flashloan.getFlashloan(pool.address, token1.address);
     });
 });

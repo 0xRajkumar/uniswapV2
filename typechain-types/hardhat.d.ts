@@ -13,6 +13,10 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
+      name: "IERC20",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC20__factory>;
+    getContractFactory(
       name: "Factory",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Factory__factory>;
@@ -45,14 +49,27 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Router__factory>;
     getContractFactory(
+      name: "Flashloan",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Flashloan__factory>;
+    getContractFactory(
       name: "Token",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Token__factory>;
+    getContractFactory(
+      name: "Flashloan",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Flashloan__factory>;
     getContractFactory(
       name: "ERC20",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ERC20__factory>;
 
+    getContractAt(
+      name: "IERC20",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC20>;
     getContractAt(
       name: "Factory",
       address: string,
@@ -94,10 +111,20 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.Router>;
     getContractAt(
+      name: "Flashloan",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Flashloan>;
+    getContractAt(
       name: "Token",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.Token>;
+    getContractAt(
+      name: "Flashloan",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Flashloan>;
     getContractAt(
       name: "ERC20",
       address: string,
