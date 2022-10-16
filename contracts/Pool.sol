@@ -62,7 +62,6 @@ contract Pool is ERC20, Math {
     function burn(address _to) public returns (uint256, uint256) {
         uint256 balance0 = IERC20(token0).balanceOf(address(this));
         uint256 balance1 = IERC20(token1).balanceOf(address(this));
-
         uint256 liquidity = balanceOf[address(this)];
         uint256 amount0 = (balance0 * liquidity) / totalSupply;
         uint256 amount1 = (balance1 * liquidity) / totalSupply;
@@ -94,7 +93,7 @@ contract Pool is ERC20, Math {
         if (amount0 > 0) _safeTransfer(token0, to, amount0);
         if (amount1 > 0) _safeTransfer(token1, to, amount1);
         if (data.length > 0) {
-            ICallee(to).Callee(msg.sender, amount0, amount1, '');
+            ICallee(to).Call(msg.sender, amount0, amount1, '');
         }
         uint256 balance0 = IERC20(token0).balanceOf(address(this));
         uint256 balance1 = IERC20(token1).balanceOf(address(this));
@@ -108,6 +107,10 @@ contract Pool is ERC20, Math {
         require(amount0In > 0 || amount1In > 0, 'insufficient input amount');
         uint256 balance0Adjusted = (1000 * balance0) - (amount0In * 3);
         uint256 balance1Adjusted = (1000 * balance1) - (amount1In * 3);
+        console.log(
+            balance0Adjusted * balance1Adjusted >=
+                uint256(reserve0_) * uint256(reserve1_) * (1000**2)
+        );
         require(
             balance0Adjusted * balance1Adjusted >=
                 uint256(reserve0_) * uint256(reserve1_) * (1000**2),

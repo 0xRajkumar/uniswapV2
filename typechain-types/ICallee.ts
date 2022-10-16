@@ -20,15 +20,15 @@ import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
 export interface ICalleeInterface extends utils.Interface {
   contractName: "ICallee";
   functions: {
-    "Callee(address,uint256,uint256,bytes)": FunctionFragment;
+    "Call(address,uint256,uint256,bytes)": FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: "Callee",
+    functionFragment: "Call",
     values: [string, BigNumberish, BigNumberish, BytesLike]
   ): string;
 
-  decodeFunctionResult(functionFragment: "Callee", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "Call", data: BytesLike): Result;
 
   events: {};
 }
@@ -61,7 +61,7 @@ export interface ICallee extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    Callee(
+    Call(
       sender: string,
       amount0Out: BigNumberish,
       amount1Out: BigNumberish,
@@ -70,7 +70,7 @@ export interface ICallee extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
-  Callee(
+  Call(
     sender: string,
     amount0Out: BigNumberish,
     amount1Out: BigNumberish,
@@ -79,7 +79,7 @@ export interface ICallee extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    Callee(
+    Call(
       sender: string,
       amount0Out: BigNumberish,
       amount1Out: BigNumberish,
@@ -91,7 +91,7 @@ export interface ICallee extends BaseContract {
   filters: {};
 
   estimateGas: {
-    Callee(
+    Call(
       sender: string,
       amount0Out: BigNumberish,
       amount1Out: BigNumberish,
@@ -101,7 +101,7 @@ export interface ICallee extends BaseContract {
   };
 
   populateTransaction: {
-    Callee(
+    Call(
       sender: string,
       amount0Out: BigNumberish,
       amount1Out: BigNumberish,

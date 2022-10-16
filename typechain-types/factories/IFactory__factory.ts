@@ -20,7 +20,7 @@ const _abi = [
         type: "address",
       },
     ],
-    name: "createPair",
+    name: "createPool",
     outputs: [
       {
         internalType: "address",
@@ -44,7 +44,7 @@ const _abi = [
         type: "address",
       },
     ],
-    name: "getPair",
+    name: "getPool",
     outputs: [
       {
         internalType: "address",

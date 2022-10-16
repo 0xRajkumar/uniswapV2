@@ -19,21 +19,21 @@ import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
 export interface IFactoryInterface extends utils.Interface {
   contractName: "IFactory";
   functions: {
-    "createPair(address,address)": FunctionFragment;
-    "getPair(address,address)": FunctionFragment;
+    "createPool(address,address)": FunctionFragment;
+    "getPool(address,address)": FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: "createPair",
+    functionFragment: "createPool",
     values: [string, string]
   ): string;
   encodeFunctionData(
-    functionFragment: "getPair",
+    functionFragment: "getPool",
     values: [string, string]
   ): string;
 
-  decodeFunctionResult(functionFragment: "createPair", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "getPair", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "createPool", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getPool", data: BytesLike): Result;
 
   events: {};
 }
@@ -66,39 +66,39 @@ export interface IFactory extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    createPair(
+    createPool(
       arg0: string,
       arg1: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    getPair(
+    getPool(
       arg0: string,
       arg1: string,
       overrides?: CallOverrides
     ): Promise<[string]>;
   };
 
-  createPair(
+  createPool(
     arg0: string,
     arg1: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  getPair(
+  getPool(
     arg0: string,
     arg1: string,
     overrides?: CallOverrides
   ): Promise<string>;
 
   callStatic: {
-    createPair(
+    createPool(
       arg0: string,
       arg1: string,
       overrides?: CallOverrides
     ): Promise<string>;
 
-    getPair(
+    getPool(
       arg0: string,
       arg1: string,
       overrides?: CallOverrides
@@ -108,13 +108,13 @@ export interface IFactory extends BaseContract {
   filters: {};
 
   estimateGas: {
-    createPair(
+    createPool(
       arg0: string,
       arg1: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    getPair(
+    getPool(
       arg0: string,
       arg1: string,
       overrides?: CallOverrides
@@ -122,13 +122,13 @@ export interface IFactory extends BaseContract {
   };
 
   populateTransaction: {
-    createPair(
+    createPool(
       arg0: string,
       arg1: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    getPair(
+    getPool(
       arg0: string,
       arg1: string,
       overrides?: CallOverrides

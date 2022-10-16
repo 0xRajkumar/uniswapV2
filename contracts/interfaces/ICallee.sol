@@ -2,7 +2,7 @@
 pragma solidity ^0.8.10;
 
 interface ICallee {
-    function Callee(
+    function Call(
         address sender,
         uint256 amount0Out,
         uint256 amount1Out,

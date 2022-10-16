@@ -13,7 +13,7 @@ library Library {
     ) public returns (uint256 reserveA, uint256 reserveB) {
         (address token0, address token1) = sortTokens(tokenA, tokenB);
         (uint256 reserve0, uint256 reserve1, ) = IPool(
-            pairFor(factoryAddress, token0, token1)
+            poolFor(factoryAddress, token0, token1)
         ).getReserves();
         (reserveA, reserveB) = tokenA == token0
             ? (reserve0, reserve1)
@@ -25,8 +25,8 @@ library Library {
         uint256 reserveIn,
         uint256 reserveOut
     ) public pure returns (uint256 amountOut) {
-        require(amountIn != 0, 'insufficient amount');
-        require(reserveIn != 0 && reserveOut != 0, 'insufficient amount');
+        require(amountIn != 0, 'insufficient amount in');
+        require(reserveIn != 0 && reserveOut != 0, 'insufficient reserves');
         return (amountIn * reserveOut) / reserveIn;
     }
 
@@ -50,9 +50,8 @@ library Library {
         require(amountOut > 0, 'insufficient amount');
         require(reserveIn > 0 && reserveOut > 0, 'insufficient reserve');
         return
-            ((1000 * reserveIn * amountOut) / (reserveOut - amountOut)) *
-            977 +
-            1;
+            ((1000 * reserveIn * amountOut) /
+                ((reserveOut - amountOut) * 977)) + 1;
     }
 
     function getAmountsOut(
@@ -83,13 +82,13 @@ library Library {
         require(path.length >= 2, 'invalid path');
         uint256[] memory amounts = new uint256[](path.length);
         amounts[path.length - 1] = amountOut;
-        for (uint256 i = path.length - 1; i > 0; i++) {
+        for (uint256 i = path.length - 1; i > 0; i--) {
             (uint256 reserve0, uint256 reserve1) = getReserves(
                 factory,
                 path[i - 1],
                 path[i]
             );
-            amounts[i - 1] = getAmountOut(amounts[i], reserve0, reserve1);
+            amounts[i - 1] = getAmountIn(amounts[i], reserve0, reserve1);
         }
 
         return amounts;
@@ -103,13 +102,13 @@ library Library {
         return tokenA < tokenB ? (tokenA, tokenB) : (tokenB, tokenA);
     }
 
-    function pairFor(
+    function poolFor(
         address factoryAddress,
         address tokenA,
         address tokenB
-    ) public pure returns (address pairAddress) {
+    ) public pure returns (address poolAddress) {
         (address token0, address token1) = sortTokens(tokenA, tokenB);
-        pairAddress = address(
+        poolAddress = address(
             uint160(
                 uint256(
                     keccak256(

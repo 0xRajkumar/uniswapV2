@@ -30,7 +30,7 @@ const _abi = [
         type: "bytes",
       },
     ],
-    name: "Callee",
+    name: "Call",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

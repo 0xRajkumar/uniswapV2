@@ -32,6 +32,7 @@ interface IPool {
     function swap(
         uint256,
         uint256,
-        address
+        address,
+        bytes calldata
     ) external;
 }

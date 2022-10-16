@@ -22,7 +22,7 @@ export interface RouterInterface extends utils.Interface {
   functions: {
     "_swap(uint256[],address[],address)": FunctionFragment;
     "addLiquidity(address,address,uint256,uint256,uint256,uint256,address)": FunctionFragment;
-    "removeLiquidity(address,address,uint256,uint256,address)": FunctionFragment;
+    "removeLiquidity(address,address,uint256,uint256,uint256,address)": FunctionFragment;
     "swapExactTokensForTokens(uint256,uint256,address[],address)": FunctionFragment;
     "swapTokensForExactTokens(uint256,uint256,address[],address)": FunctionFragment;
   };
@@ -45,7 +45,7 @@ export interface RouterInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "removeLiquidity",
-    values: [string, string, BigNumberish, BigNumberish, string]
+    values: [string, string, BigNumberish, BigNumberish, BigNumberish, string]
   ): string;
   encodeFunctionData(
     functionFragment: "swapExactTokensForTokens",
@@ -126,6 +126,7 @@ export interface Router extends BaseContract {
     removeLiquidity(
       tokenA: string,
       tokenB: string,
+      liquidity: BigNumberish,
       minAmountA: BigNumberish,
       minAmountB: BigNumberish,
       to: string,
@@ -170,6 +171,7 @@ export interface Router extends BaseContract {
   removeLiquidity(
     tokenA: string,
     tokenB: string,
+    liquidity: BigNumberish,
     minAmountA: BigNumberish,
     minAmountB: BigNumberish,
     to: string,
@@ -220,17 +222,12 @@ export interface Router extends BaseContract {
     removeLiquidity(
       tokenA: string,
       tokenB: string,
+      liquidity: BigNumberish,
       minAmountA: BigNumberish,
       minAmountB: BigNumberish,
       to: string,
       overrides?: CallOverrides
-    ): Promise<
-      [BigNumber, BigNumber, BigNumber] & {
-        amountA: BigNumber;
-        amountB: BigNumber;
-        liquidity: BigNumber;
-      }
-    >;
+    ): Promise<[BigNumber, BigNumber]>;
 
     swapExactTokensForTokens(
       amountIn: BigNumberish,
@@ -273,6 +270,7 @@ export interface Router extends BaseContract {
     removeLiquidity(
       tokenA: string,
       tokenB: string,
+      liquidity: BigNumberish,
       minAmountA: BigNumberish,
       minAmountB: BigNumberish,
       to: string,
@@ -318,6 +316,7 @@ export interface Router extends BaseContract {
     removeLiquidity(
       tokenA: string,
       tokenB: string,
+      liquidity: BigNumberish,
       minAmountA: BigNumberish,
       minAmountB: BigNumberish,
       to: string,

@@ -20,7 +20,7 @@ export interface LibraryInterface extends utils.Interface {
   functions: {
     "getAmountIn(uint256,uint256,uint256)": FunctionFragment;
     "getAmountOut(uint256,uint256,uint256)": FunctionFragment;
-    "pairFor(address,address,address)": FunctionFragment;
+    "poolFor(address,address,address)": FunctionFragment;
     "quote(uint256,uint256,uint256)": FunctionFragment;
     "sortTokens(address,address)": FunctionFragment;
   };
@@ -34,7 +34,7 @@ export interface LibraryInterface extends utils.Interface {
     values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "pairFor",
+    functionFragment: "poolFor",
     values: [string, string, string]
   ): string;
   encodeFunctionData(
@@ -54,7 +54,7 @@ export interface LibraryInterface extends utils.Interface {
     functionFragment: "getAmountOut",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "pairFor", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "poolFor", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "quote", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "sortTokens", data: BytesLike): Result;
 
@@ -103,12 +103,12 @@ export interface Library extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    pairFor(
+    poolFor(
       factoryAddress: string,
       tokenA: string,
       tokenB: string,
       overrides?: CallOverrides
-    ): Promise<[string] & { pairAddress: string }>;
+    ): Promise<[string] & { poolAddress: string }>;
 
     quote(
       amountIn: BigNumberish,
@@ -138,7 +138,7 @@ export interface Library extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  pairFor(
+  poolFor(
     factoryAddress: string,
     tokenA: string,
     tokenB: string,
@@ -173,7 +173,7 @@ export interface Library extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    pairFor(
+    poolFor(
       factoryAddress: string,
       tokenA: string,
       tokenB: string,
@@ -211,7 +211,7 @@ export interface Library extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    pairFor(
+    poolFor(
       factoryAddress: string,
       tokenA: string,
       tokenB: string,
@@ -247,7 +247,7 @@ export interface Library extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    pairFor(
+    poolFor(
       factoryAddress: string,
       tokenA: string,
       tokenB: string,

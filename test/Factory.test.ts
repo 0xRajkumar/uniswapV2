@@ -8,9 +8,8 @@ import {
 } from '../typechain-types';
 
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-const toWei = (value: number): string => {
-    return ethers.utils.parseEther(value.toString()).toString();
-};
+
+import { toWei } from './shared/utilities';
 
 describe('Factory', async () => {
     let factory: Factory;

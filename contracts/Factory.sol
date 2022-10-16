@@ -10,7 +10,7 @@ contract Factory {
 
     function createPool(address _tokenA, address _tokenB)
         public
-        returns (address pool)
+        returns (address)
     {
         require(_tokenA != _tokenB, 'same tokens');
         (address token0, address token1) = _tokenA < _tokenB
@@ -20,6 +20,7 @@ contract Factory {
         require(getPool[token0][token1] == address(0), 'pool already created');
         bytes memory bytecode = type(Pool).creationCode;
         bytes32 salt = keccak256(abi.encodePacked(token0, token1));
+        address pool;
         assembly {
             pool := create2(0, add(bytecode, 32), mload(bytecode), salt)
         }

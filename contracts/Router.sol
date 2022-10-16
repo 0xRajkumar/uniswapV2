@@ -27,8 +27,8 @@ contract Router {
             uint256 liquidity
         )
     {
-        if (factory.getPair(tokenA, tokenB) == address(0)) {
-            factory.createPair(tokenA, tokenB);
+        if (factory.getPool(tokenA, tokenB) == address(0)) {
+            factory.createPool(tokenA, tokenB);
         }
         (amountA, amountB) = _calculateLiquidity(
             tokenA,
@@ -38,7 +38,7 @@ contract Router {
             minAmountA,
             minAmountB
         );
-        address PoolAddress = Library.pairFor(address(factory), tokenA, tokenB);
+        address PoolAddress = Library.poolFor(address(factory), tokenA, tokenB);
         _safeTransferFrom(tokenA, msg.sender, PoolAddress, amountA);
         _safeTransferFrom(tokenB, msg.sender, PoolAddress, amountB);
         liquidity = IPool(PoolAddress).mint(to);
@@ -47,24 +47,19 @@ contract Router {
     function removeLiquidity(
         address tokenA,
         address tokenB,
+        uint256 liquidity,
         uint256 minAmountA,
         uint256 minAmountB,
         address to
-    )
-        public
-        returns (
-            uint256 amountA,
-            uint256 amountB,
-            uint256 liquidity
-        )
-    {
-        address PoolAddress = Library.pairFor(address(factory), tokenA, tokenB);
+    ) public returns (uint256, uint256) {
+        address PoolAddress = Library.poolFor(address(factory), tokenA, tokenB);
         IPool(PoolAddress).transferFrom(msg.sender, PoolAddress, liquidity);
-        (amountA, amountB) = IPool(PoolAddress).burn(to);
+        (uint256 amountA, uint256 amountB) = IPool(PoolAddress).burn(to);
         require(
-            amountA > minAmountA && amountB > minAmountB,
+            amountA >= minAmountA && amountB >= minAmountB,
             'Insufficient amount'
         );
+        return (amountA, amountB);
     }
 
     function _calculateLiquidity(
@@ -74,14 +69,17 @@ contract Router {
         uint256 amountBDesired,
         uint256 minAmountA,
         uint256 minAmountB
-    ) internal returns (uint256 amountA, uint256 amountB) {
+    ) internal returns (uint256, uint256) {
         (uint256 reserveA, uint256 reserveB) = Library.getReserves(
             address(factory),
             tokenA,
             tokenB
         );
+        uint256 amountA;
+        uint256 amountB;
         if (reserveA == 0 && reserveB == 0) {
-            (amountA, amountB) = (reserveA, reserveB);
+            (amountA, amountB) = (amountADesired, amountBDesired);
+            return (amountA, amountB);
         }
         uint256 amountBOptimal = Library.quote(
             amountADesired,
@@ -89,8 +87,9 @@ contract Router {
             reserveB
         );
         if (amountBOptimal <= amountBDesired) {
-            require(amountBOptimal >= minAmountB, 'insufficient amountB ');
+            require(amountBOptimal >= minAmountB, 'insufficient amount B');
             (amountA, amountB) = (amountADesired, amountBOptimal);
+            return (amountA, amountB);
         } else {
             uint256 amountAOptimal = Library.quote(
                 amountBDesired,
@@ -100,6 +99,7 @@ contract Router {
             require(amountAOptimal <= amountADesired, 'low amount A and B');
             require(amountAOptimal >= minAmountA, 'insufficient amount A');
             (amountA, amountB) = (amountBOptimal, amountBDesired);
+            return (amountA, amountB);
         }
     }
 
@@ -117,13 +117,10 @@ contract Router {
                 value
             )
         );
-
         require(
             success && (data.length == 0 || abi.decode(data, (bool))),
             'SafeTransferFailed'
         );
-        // if (!success || (data.length != 0 && !abi.decode(data, (bool))))
-        //     revert SafeTransferFailed();
     }
 
     function swapExactTokensForTokens(
@@ -144,7 +141,7 @@ contract Router {
         _safeTransferFrom(
             path[0],
             msg.sender,
-            Library.pairFor(address(factory), path[0], path[1]),
+            Library.poolFor(address(factory), path[0], path[1]),
             amounts[0]
         );
         _swap(amounts, path, to);
@@ -166,7 +163,7 @@ contract Router {
         _safeTransferFrom(
             path[0],
             msg.sender,
-            Library.pairFor(address(factory), path[0], path[1]),
+            Library.poolFor(address(factory), path[0], path[1]),
             amounts[0]
         );
         _swap(amounts, path, to);
@@ -186,12 +183,13 @@ contract Router {
                 ? (uint256(0), amountOut)
                 : (amountOut, uint256(0));
             address to = i < path.length - 2
-                ? Library.pairFor(address(factory), output, path[i + 2])
+                ? Library.poolFor(address(factory), output, path[i + 2])
                 : _to;
-            IPool(Library.pairFor(address(factory), input, output)).swap(
+            IPool(Library.poolFor(address(factory), input, output)).swap(
                 amount0Out,
                 amount1Out,
-                to
+                to,
+                ''
             );
         }
     }

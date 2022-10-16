@@ -136,6 +136,11 @@ const _abi = [
         name: "",
         type: "address",
       },
+      {
+        internalType: "bytes",
+        name: "",
+        type: "bytes",
+      },
     ],
     name: "swap",
     outputs: [],

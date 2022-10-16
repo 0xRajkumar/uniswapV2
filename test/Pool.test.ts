@@ -10,13 +10,9 @@ import {
 } from '../typechain-types';
 
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-const toWei = (value: number): string => {
-    return ethers.utils.parseEther(value.toString()).toString();
-};
-const getBalance = ethers.provider.getBalance;
-const fromWei = (value: string): number => {
-    return Number(ethers.utils.formatEther(value));
-};
+
+import { toWei, fromWei } from './shared/utilities';
+
 describe('Pool', function () {
     let factory: Factory;
     let pool: Pool;

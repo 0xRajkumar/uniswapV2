@@ -2,7 +2,7 @@
 pragma solidity ^0.8.10;
 
 interface IFactory {
-    function getPair(address, address) external pure returns (address);
+    function getPool(address, address) external pure returns (address);
 
-    function createPair(address, address) external returns (address);
+    function createPool(address, address) external returns (address);
 }

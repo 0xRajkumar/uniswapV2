@@ -24,7 +24,7 @@ export interface IPoolInterface extends utils.Interface {
     "getReserves()": FunctionFragment;
     "initialize(address,address)": FunctionFragment;
     "mint(uint256,uint256,address,bytes)": FunctionFragment;
-    "swap(uint256,uint256,address)": FunctionFragment;
+    "swap(uint256,uint256,address,bytes)": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
   };
 
@@ -43,7 +43,7 @@ export interface IPoolInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "swap",
-    values: [BigNumberish, BigNumberish, string]
+    values: [BigNumberish, BigNumberish, string, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "transferFrom",
@@ -126,6 +126,7 @@ export interface IPool extends BaseContract {
       arg0: BigNumberish,
       arg1: BigNumberish,
       arg2: string,
+      arg3: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -169,6 +170,7 @@ export interface IPool extends BaseContract {
     arg0: BigNumberish,
     arg1: BigNumberish,
     arg2: string,
+    arg3: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -212,6 +214,7 @@ export interface IPool extends BaseContract {
       arg0: BigNumberish,
       arg1: BigNumberish,
       arg2: string,
+      arg3: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -258,6 +261,7 @@ export interface IPool extends BaseContract {
       arg0: BigNumberish,
       arg1: BigNumberish,
       arg2: string,
+      arg3: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -302,6 +306,7 @@ export interface IPool extends BaseContract {
       arg0: BigNumberish,
       arg1: BigNumberish,
       arg2: string,
+      arg3: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
